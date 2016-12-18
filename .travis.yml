@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.5"
+virtualenv:
+    system_site_packages: true
+
+before_install:
+  - pip install git build-essential gfortran python-dev liblapack-dev python-openbabel python-setuptools
+  - pip install -qq python-numpy python-scipy python-matplotlib
+  - git clone https://github.com/dbaugher/PyFC.git
+  - cd pyfc
+
+install:
+  - pip install -r requirements.txt
+script:
