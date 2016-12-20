@@ -1,15 +1,36 @@
 language: python
+sudo: false
 python:
   - "3.5"
-virtualenv:
-    system_site_packages: true
+addons:
+  apt:
+    packages:
+    - git
 
-before_install:
-  - pip install git build-essential gfortran python-dev liblapack-dev python-openbabel python-setuptools
-  - pip install -qq python-numpy python-scipy python-matplotlib
-  - git clone https://github.com/dbaugher/PyFC.git
-  - cd pyfc
+before install:
+  # We do this conditionally because it saves us some downloading if the
+  # version is the same.
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - export PYTHONPATH=$TRAVIS_BUILD_DIR/PyFC:$PYTHONPATH
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  # Useful for debugging any issues with conda
+  - conda info -a
 
 install:
-  - pip install -r requirements.txt
+  # for when database of FC parameters are needed
+  # - cd ..
+  # - git clone
+  - conda env create -f environment_linux.yml
+  - source activate pyfc
+  - python setup.py install
+
 script:
+  # Your test script goes here
