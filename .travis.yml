@@ -7,7 +7,7 @@ addons:
     packages:
     - git
 
-before install:
+install:
   # We do this conditionally because it saves us some downloading if the
   # version is the same.
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
@@ -24,7 +24,6 @@ before install:
   # Useful for debugging any issues with conda
   - conda info -a
 
-install:
   # for when database of FC parameters are needed
   # - cd ..
   # - git clone
